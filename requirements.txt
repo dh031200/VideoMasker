@@ -10,3 +10,5 @@ ultralytics
 scipy
 supervision
 lapx
+numpy
+pillow

@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: MIT
 
 from .bytetrack import BYTETracker
-from .sfsort import SFSORT, gen_track_args
+
+# from .sfsort import SFSORT, gen_track_args
 
 
 class Tracker:
@@ -12,12 +13,12 @@ class Tracker:
     ):
         if method == "bytetrack":
             tracker = BYTETracker(track_thresh=track_thresh)
-        elif method == "SFSORT":
-            if all([width, height, fps]):
-                tracker = SFSORT(gen_track_args(width=width, height=height, fps=fps))
-            else:
-                msg = "SFSORT needs width, height, fps"
-                raise ValueError(msg)
+        # elif method == "SFSORT": # TODO
+        #     if all([width, height, fps]):
+        #         tracker = SFSORT(gen_track_args(width=width, height=height, fps=fps))
+        #     else:
+        #         msg = "SFSORT needs width, height, fps"
+        #         raise ValueError(msg)
         else:
             tracker = BYTETracker(track_thresh=track_thresh)
         self.tracker = tracker
