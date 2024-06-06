@@ -25,10 +25,12 @@ class DeId:
             left, top, right, bottom = map(int, det[:4])
             canvas = np.zeros_like(image[top:bottom, left:right])
             h, w, _ = canvas.shape
-            strength = int((((h ** 2) + (w ** 2)) ** 0.5) / 10) * strength_factor
+            strength = int((((h**2) + (w**2)) ** 0.5) / 10) * strength_factor
             cv2.ellipse(canvas, ((w // 2, h // 2), (w, h), 0), (255, 255, 255), -1)
             a = cv2.bitwise_and(image[top:bottom, left:right], cv2.bitwise_not(canvas))
-            b = cv2.bitwise_and(self.method(image[top:bottom, left:right], strength=strength), canvas)
+            b = cv2.bitwise_and(
+                self.method(image[top:bottom, left:right], strength=strength), canvas
+            )
             image[top:bottom, left:right] = a + b
 
     @staticmethod

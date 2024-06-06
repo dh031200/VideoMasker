@@ -6,7 +6,11 @@ import numpy as np
 
 def linear_assignment(cost_matrix, thresh):
     if cost_matrix.size == 0:
-        return np.empty((0, 2), dtype=int), tuple(range(cost_matrix.shape[0])), tuple(range(cost_matrix.shape[1]))
+        return (
+            np.empty((0, 2), dtype=int),
+            tuple(range(cost_matrix.shape[0])),
+            tuple(range(cost_matrix.shape[1])),
+        )
     cost, x, y = lap.lapjv(cost_matrix, extend_cost=True, cost_limit=thresh)
     matches = [[ix, mx] for ix, mx in enumerate(x) if mx >= 0]
     unmatched_a = np.where(x < 0)[0]
@@ -34,9 +38,13 @@ def bbox_ioa(box1, box2, eps=1e-7, *, iou=False):
     b2_x1, b2_y1, b2_x2, b2_y2 = box2.T
 
     # Intersection area
-    inter_area = (np.minimum(b1_x2[:, None], b2_x2) - np.maximum(b1_x1[:, None], b2_x1)).clip(0) * (
+    inter_area = (
+        np.minimum(b1_x2[:, None], b2_x2) - np.maximum(b1_x1[:, None], b2_x1)
+    ).clip(0) * (
         np.minimum(b1_y2[:, None], b2_y2) - np.maximum(b1_y1[:, None], b2_y1)
-    ).clip(0)
+    ).clip(
+        0
+    )
 
     # Box2 area
     area = (b2_x2 - b2_x1) * (b2_y2 - b2_y1)
@@ -57,7 +65,12 @@ def iou_distance(atracks, btracks):
     :rtype cost_matrix np.ndarray
     """
 
-    if atracks and isinstance(atracks[0], np.ndarray) or btracks and isinstance(btracks[0], np.ndarray):
+    if (
+        atracks
+        and isinstance(atracks[0], np.ndarray)
+        or btracks
+        and isinstance(btracks[0], np.ndarray)
+    ):
         atlbrs = atracks
         btlbrs = btracks
     else:

@@ -5,10 +5,24 @@ import sys
 from pathlib import Path
 
 import cv2
-from PySide6.QtGui import QAction, QPixmap, QFont
-from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QSlider, QWidget, QVBoxLayout,
-                               QHBoxLayout, QFileDialog, QSpacerItem, QLineEdit, QGroupBox, QCheckBox, QRadioButton,
-                               QListWidgetItem, QListWidget, QLabel)
+from PySide6.QtGui import QAction
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QPushButton,
+    QSlider,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QFileDialog,
+    QLineEdit,
+    QGroupBox,
+    QCheckBox,
+    QRadioButton,
+    QListWidgetItem,
+    QListWidget,
+    QLabel,
+)
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtCore import QUrl, Qt, QTime
@@ -23,24 +37,22 @@ class VideoEditor(QMainWindow):
         # self.detector = Detector()
         self.setWindowTitle("VideoMasker")
         self.resize(1280, 800)
-        self.selected_video_path = ''
+        self.selected_video_path = ""
 
-        open_action = QAction('&Open', self)
-        open_action.setShortcut('Ctrl+O')
-        open_action.setStatusTip('Open video')
+        open_action = QAction("&Open", self)
+        open_action.setShortcut("Ctrl+O")
+        open_action.setStatusTip("Open video")
         open_action.triggered.connect(self.get_file_path)
 
-        close_action = QAction('&Close', self)
-        close_action.setStatusTip('Close video')
+        close_action = QAction("&Close", self)
+        close_action.setStatusTip("Close video")
         close_action.triggered.connect(self.close_video)
 
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
-        menubar.setStyleSheet("font-weight: bold;"
-                              "text-decoration: underline;")
-        file_menu = menubar.addMenu('File')
-        file_menu.setStyleSheet("font-weight: normal;"
-                                "text-decoration: none;")
+        menubar.setStyleSheet("font-weight: bold;" "text-decoration: underline;")
+        file_menu = menubar.addMenu("File")
+        file_menu.setStyleSheet("font-weight: normal;" "text-decoration: none;")
         file_menu.addAction(open_action)
         file_menu.addAction(close_action)
         menubar.addSeparator()
@@ -58,19 +70,23 @@ class VideoEditor(QMainWindow):
         self.slider.sliderMoved.connect(self.set_position)
         self.slider.setEnabled(False)
 
-        self.current_time = QLineEdit('00:00:00:00')
+        self.current_time = QLineEdit("00:00:00:00")
         self.current_time.setReadOnly(True)
         self.current_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.current_time.setFixedWidth(100)
         self.current_time.setUpdatesEnabled(True)
-        self.current_time.selectionChanged.connect(lambda: self.current_time.setSelection(0, 0))
+        self.current_time.selectionChanged.connect(
+            lambda: self.current_time.setSelection(0, 0)
+        )
 
-        self.total_time = QLineEdit('00:00:00:00')
+        self.total_time = QLineEdit("00:00:00:00")
         self.total_time.setReadOnly(True)
         self.total_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.total_time.setFixedWidth(100)
         self.total_time.setUpdatesEnabled(True)
-        self.total_time.selectionChanged.connect(lambda: self.total_time.setSelection(0, 0))
+        self.total_time.selectionChanged.connect(
+            lambda: self.total_time.setSelection(0, 0)
+        )
 
         slider_layout.addWidget(self.current_time)
         slider_layout.addWidget(self.slider)
@@ -112,22 +128,22 @@ class VideoEditor(QMainWindow):
         function_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         function_layout.setSpacing(30)
 
-        target_groupbox = QGroupBox('Targets')
+        target_groupbox = QGroupBox("Targets")
         target_groupbox.setFixedSize(160, 100)
-        self.face_checkbox = QCheckBox('Face')
+        self.face_checkbox = QCheckBox("Face")
         self.face_checkbox.setChecked(True)
-        self.plate_checkbox = QCheckBox('Plate')
+        self.plate_checkbox = QCheckBox("Plate")
         target_layout = QVBoxLayout()
         target_layout.addWidget(self.face_checkbox)
         target_layout.addWidget(self.plate_checkbox)
         target_groupbox.setLayout(target_layout)
 
-        method_groupbox = QGroupBox('De-Identification')
+        method_groupbox = QGroupBox("De-Identification")
         method_groupbox.setFixedSize(160, 100)
-        self.blur = QRadioButton('Blur')
+        self.blur = QRadioButton("Blur")
         self.blur.setChecked(True)
-        self.pixelate = QRadioButton('Pixelate')
-        self.emoji = QRadioButton('Emoji')
+        self.pixelate = QRadioButton("Pixelate")
+        self.emoji = QRadioButton("Emoji")
         method_box = QVBoxLayout()
         method_box.addWidget(self.blur)
         method_box.addWidget(self.pixelate)
@@ -174,9 +190,9 @@ class VideoEditor(QMainWindow):
         self.slider.setEnabled(True)
 
     def get_file_path(self):
-        selected_file = QFileDialog.getOpenFileName(self, caption='Open file',
-                                                    dir='../',
-                                                    filter='Video (*.mp4 *.avi *.mov)')
+        selected_file = QFileDialog.getOpenFileName(
+            self, caption="Open file", dir="../", filter="Video (*.mp4 *.avi *.mov)"
+        )
         self.close_video()
         self.selected_video_path = selected_file[0]
         self.open_video()
@@ -184,11 +200,11 @@ class VideoEditor(QMainWindow):
     def close_video(self, hot_reload=False):
         if not hot_reload:
             self.image_list.clear()
-            self.selected_video_path = ''
-        self.media_player.setSource('')
+            self.selected_video_path = ""
+        self.media_player.setSource("")
         self.slider.setValue(0)
-        self.current_time.setText('00:00:00:00')
-        self.total_time.setText('00:00:00:00')
+        self.current_time.setText("00:00:00:00")
+        self.total_time.setText("00:00:00:00")
         self.play_button.setText("▶")
         self.button_group.setEnabled(False)
         self.slider.setEnabled(False)
@@ -200,7 +216,9 @@ class VideoEditor(QMainWindow):
             self.media_player.pause()
         cap = cv2.VideoCapture(self.selected_video_path)
         fps = int(cap.get(cv2.CAP_PROP_FPS))
-        width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
+            cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        )
         face_detector = Detector(fps=fps, width=width, height=height)
         while True:
             ret, frame = cap.read()
@@ -211,8 +229,8 @@ class VideoEditor(QMainWindow):
                 for img in cropped_image_list:
                     self.add_image(img)
             img = face_detector.visualize(original_image=frame, detections=detections)
-            cv2.imshow('Analyzing...', img)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imshow("Analyzing...", img)
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         cv2.destroyAllWindows()
         cap.release()
@@ -221,7 +239,7 @@ class VideoEditor(QMainWindow):
 
     def add_image(self, image_path):
         file_name = Path(image_path).stem
-        face_id = file_name.split('_')[0]
+        face_id = file_name.split("_")[0]
         item = QListWidgetItem()
 
         container = QWidget()
@@ -265,15 +283,17 @@ class VideoEditor(QMainWindow):
             self.media_player.pause()
         selected_items = self.get_selected_items()
         if self.blur.isChecked():
-            method = 'blur'
+            method = "blur"
         elif self.pixelate.isChecked():
-            method = 'pixelate'
+            method = "pixelate"
         else:
-            method = 'emoji'
+            method = "emoji"
 
         cap = cv2.VideoCapture(self.selected_video_path)
         fps = int(cap.get(cv2.CAP_PROP_FPS))
-        width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
+            cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        )
 
         output_path = Path("output")
         output_path.mkdir(exist_ok=True)
@@ -292,11 +312,11 @@ class VideoEditor(QMainWindow):
             ret, frame = cap.read()
             if not ret:
                 break
-            detections = face_detector(frame=frame, mode='de-id')
+            detections = face_detector(frame=frame, mode="de-id")
             de_id(detections, frame, strength_factor=1)
             writer.write(frame)
-            cv2.imshow('Processing...', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imshow("Processing...", frame)
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         cv2.destroyAllWindows()
         cap.release()
