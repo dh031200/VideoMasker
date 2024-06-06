@@ -36,10 +36,16 @@ class Cropper:
             cls = track.cls
             cls_filter = self.classes is None or (track.cls in self.classes)
 
-            if all([not self.captured[tid], track.tracklet_len > self.capture_thresh, cls_filter]):
+            if all(
+                [
+                    not self.captured[tid],
+                    track.tracklet_len > self.capture_thresh,
+                    cls_filter,
+                ]
+            ):
                 left, top, right, bottom = map(int, track.tlbr)
                 cropped_image = image[top:bottom, left:right]
-                width, height = right-left, bottom-top
+                width, height = right - left, bottom - top
 
                 margin = [np.abs(height - width) // 2, np.abs(height - width) // 2]
 
@@ -58,7 +64,7 @@ class Cropper:
                     margin_list.append([0, 0])
 
                 # 이미지에 margin 추가
-                output = np.pad(cropped_image, margin_list, mode='constant')
+                output = np.pad(cropped_image, margin_list, mode="constant")
 
                 cv2.imwrite(f"{self.save_dir}/{tid}_{self.names[cls]}.png", output)
                 cropped_images.append(f"{self.save_dir}/{tid}_{self.names[cls]}.png")

@@ -21,7 +21,7 @@ class EmbedDetector:
     def __init__(self):
         model_path = "yolov8s-oiv7-face.pt"
         device = "mps"
-        self.model = YOLO(model_path, task='detect')
+        self.model = YOLO(model_path, task="detect")
         self.device = device
 
         self.box_annotator = sv.BoundingBoxAnnotator(thickness=2)
@@ -87,7 +87,9 @@ class EmbedDetector:
                 detections=detections,
             )
             annotated_frame = self.label_annotator.annotate(
-                scene=annotated_frame, detections=detections, labels=make_labels(detections)
+                scene=annotated_frame,
+                detections=detections,
+                labels=make_labels(detections),
             )
         else:
             annotated_frame = original_image
@@ -188,7 +190,7 @@ class Detector:
         else:
             model_path = "model/yolov8s-oiv7-face.pt"
             device = "mps"
-        self.model = YOLO(model_path, task='detect')
+        self.model = YOLO(model_path, task="detect")
         self.device = device
         self.tracker = Tracker(method="bytetrack")
         # self.tracker = Tracker(method="SFSORT", fps=fps, width=width, height=height)
@@ -197,7 +199,7 @@ class Detector:
         self.label_annotator = sv.LabelAnnotator(text_scale=0.5, text_padding=2)
         self.embedder = imgbeddings()
 
-    def __call__(self, frame, mode='analyze'):
+    def __call__(self, frame, mode="analyze"):
         detections = self.detect(frame)
         embeddings = np.zeros(shape=(len(detections), 768), dtype=np.float32)
         for idx, detection in enumerate(detections):
@@ -207,14 +209,16 @@ class Detector:
             img_embedding = self.embedder.to_embeddings(Image.fromarray(img_cropped))[0]
             embeddings[idx] = img_embedding
         detections = self.tracker(detections, embeddings)
-        if mode == 'analyze':
+        if mode == "analyze":
             cropped_image_list = self.cropper(tracker=self.tracker, image=frame)
             return detections, cropped_image_list
         else:
             return detections
 
     def detect(self, image):
-        det = self.model(image, stream=True, verbose=False, device=self.device, conf=0.15)
+        det = self.model(
+            image, stream=True, verbose=False, device=self.device, conf=0.15
+        )
         return next(det).boxes.data.cpu().numpy()
 
     def visualize(self, original_image, detections):

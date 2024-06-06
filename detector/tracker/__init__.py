@@ -7,10 +7,12 @@ from .sfsort import SFSORT, gen_track_args
 
 
 class Tracker:
-    def __init__(self, method=None, track_thresh=0.15, width=None, height=None, fps=None):
+    def __init__(
+        self, method=None, track_thresh=0.15, width=None, height=None, fps=None
+    ):
         if method == "bytetrack":
             tracker = BYTETracker(track_thresh=track_thresh)
-        elif method == 'SFSORT':
+        elif method == "SFSORT":
             if all([width, height, fps]):
                 tracker = SFSORT(gen_track_args(width=width, height=height, fps=fps))
             else:

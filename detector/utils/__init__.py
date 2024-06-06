@@ -19,7 +19,11 @@ def to_supervision_detections(detections, *, class_agnostic=False):
     return Detections(
         xyxy=detections[:, :4],
         confidence=detections[:, 4],
-        class_id=detections[:, 5] if all([not class_agnostic, detections.shape[1]]) else detections[:, 6],
+        class_id=(
+            detections[:, 5]
+            if all([not class_agnostic, detections.shape[1]])
+            else detections[:, 6]
+        ),
         tracker_id=detections[:, 6] if detections.shape[1] == TRACK_SHAPE else None,
     )
 
@@ -29,14 +33,20 @@ def make_labels(detections):
 
     if detections.tracker_id is None:
         labels = [
-            f"{class_names[class_id]} {conf}%" for class_id, conf in zip(detections.class_id, detections.confidence)
+            f"{class_names[class_id]} {conf}%"
+            for class_id, conf in zip(detections.class_id, detections.confidence)
         ]
     else:
         labels = [
             f"{tracker_id} {class_names[class_id]} {conf}%"
-            for tracker_id, class_id, conf in zip(detections.tracker_id, detections.class_id, detections.confidence)
+            for tracker_id, class_id, conf in zip(
+                detections.tracker_id, detections.class_id, detections.confidence
+            )
         ]
     return labels
 
 
-__all__ = ("to_supervision_detections", "make_labels",)
+__all__ = (
+    "to_supervision_detections",
+    "make_labels",
+)
