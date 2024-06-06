@@ -47,7 +47,7 @@ Feel free to fork the repository, make changes, and create pull requests. Any co
 
 ## License
 
-![License](https://github.com/dh031200/VideoMasker/blob/main/LICENSE)
+[AGPL-3.0 license](https://github.com/dh031200/VideoMasker/blob/main/LICENSE)
 
 ## Contact Information
 
