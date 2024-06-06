@@ -1,6 +1,14 @@
 # VideoMasker
 
-**Secure and convenient Client-Side Video Automatic De-Identification Program**
+**Secure and convenient Client-Side Video Automatic De-Identification Program** <br/>
+1. Open the video
+2. Press the 'Analyze' button
+3. Check the thumbnail on the right and select what to exclude from de-identification (optional)
+4. Press the 'De-Id' button
+5. It's really easy, right?
+
+Videos will __not be uploaded to the server__.  <br/>
+It is only processed on __your device__.
 
 ## Requirements
 
