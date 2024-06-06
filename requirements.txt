@@ -1,0 +1,12 @@
+pyside6
+torch
+torchvision
+transformers
+scikit-learn
+opencv-python
+huggingface-hub
+imgbeddings
+ultralytics
+scipy
+supervision
+lapx
